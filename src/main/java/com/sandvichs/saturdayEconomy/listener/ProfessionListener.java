@@ -44,7 +44,7 @@ public class ProfessionListener implements Listener {
             if (Math.random() > moneyMap[1]) {
                 return;
             }
-            EconomyHandler.payPlayer(killer, moneyMap[0], true);
+            EconomyHandler.payPlayer(killer, moneyMap[0], false);
         }
     }
 }
