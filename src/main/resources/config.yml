@@ -1,9 +1,11 @@
 # config.yml
 player:
   daily: 350.0 # Amount of money a player gets calling /daily
-  hourly: 50.0 # Amount of money a player gets every hour while online
+  hourly: 200.0 # Amount of money a player gets every hour while online
   pay_freq: 4 # How many times in the hour the player gets paid
   mcmmo_scale: 0.005 # Amount of money a player gets as an hourly bonus proportional to their MCMMO level
+  tempfly_cost: 1000.0 # Cost of buying flight
+  tempfly_duration: 3600 # Duration of flight in seconds
 
 mob_chances:  # Chance of a mob giving money
   never: 0.0

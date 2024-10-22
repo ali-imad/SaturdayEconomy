@@ -1,22 +1,43 @@
 package com.sandvichs.saturdayEconomy;
 
+import com.sandvichs.saturdayEconomy.cmd.ReloadConfig;
+import com.sandvichs.saturdayEconomy.cmd.TempFly;
 import com.sandvichs.saturdayEconomy.handler.EconomyHandler;
 import com.sandvichs.saturdayEconomy.listener.PlayerListener;
 import com.sandvichs.saturdayEconomy.listener.ProfessionListener;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SaturdayEconomy extends JavaPlugin {
     private FileConfiguration config;
+    private SalaryManager salaryManager;
+    private PlayerListener playerListener;
+    private ProfessionListener professionListener;
+    public Permission perms;
+
+    public void setConfig(FileConfiguration config) {
+        this.config = config;
+    }
 
     @Override
     public void onEnable() {
+        professionListener = new ProfessionListener();
+        salaryManager = new SalaryManager();
+        playerListener = new PlayerListener(salaryManager);
+        perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
         reloadConfig();
-        ProfessionListener professionListener = new ProfessionListener(this.config);
-        SalaryManager salaryManager = new SalaryManager(this.config);
-        PlayerListener playerListener = new PlayerListener(salaryManager);
-        // check for paying salaries every minute
+        // check for paying salaries
         salaryManager.createSalaryTask().runTaskTimer(this, 0, 900); // 1200 ticks in a minute
+        getCommand("sereload").setExecutor(new ReloadConfig(this));
+
+        // check for temp flight
+        TempFly.setPlugin(this);
+        TempFly.perms = perms;
+
+        getCommand("tempfly").setExecutor(new TempFly());
+
+
         EconomyHandler.initEconomy();
 
         // register the professions listener
@@ -33,6 +54,9 @@ public final class SaturdayEconomy extends JavaPlugin {
         config = getConfig();
         config.options().copyDefaults(true);
         saveConfig();
+        TempFly.setPluginConfig(this.config);
+        salaryManager.setConfig(this.config);
+        professionListener.setConfig(this.config);
     }
 
     @Override

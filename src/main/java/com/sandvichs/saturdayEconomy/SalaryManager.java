@@ -17,7 +17,10 @@ public class SalaryManager {
     private HashMap<Player, Date> playtime = new HashMap<>();  // playtime for players
     private ConfigurationSection rates;
 
-    public SalaryManager(FileConfiguration config) {
+    public SalaryManager() {
+    }
+
+    public void setConfig(FileConfiguration config) {
         rates = config.getConfigurationSection("player");
     }
 
@@ -74,7 +77,7 @@ public class SalaryManager {
 
         if (getPlayerSessionTime(player) >= timeToSalary) {
             double salary = getSalary(player) / salaryFreq;
-//            Bukkit.getLogger().info("Paying salary of " + salary + " to player " + player);
+            Bukkit.getLogger().info("Paying salary of " + salary + " to player " + player);
             payPlayer(player, salary, false);
             playtime.put(player, new Date()); // refresh playtime
 //        } else {
@@ -85,4 +88,10 @@ public class SalaryManager {
     }
 
 
+    public void deregisterPlayer(Player player) {
+        Bukkit.getLogger().info("Player " + player + " has left. Deregistering from salary.");
+        if (playtime.remove(player) == null) {
+            Bukkit.getLogger().warning("Player " + player + " not found in playtime map.");
+        }
+    }
 }

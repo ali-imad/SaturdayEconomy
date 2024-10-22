@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 // registers players when they log in
 public class PlayerListener implements Listener {
@@ -17,5 +18,11 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player key = event.getPlayer();
         this.sm.registerPlayer(key);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player key = event.getPlayer();
+        this.sm.deregisterPlayer(key);
     }
 }

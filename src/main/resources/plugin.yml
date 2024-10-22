@@ -1,4 +1,16 @@
 name: SaturdayEconomy
-version: '0.1.0-SNAPSHOT'
+version: '0.2.0-SNAPSHOT'
 main: com.sandvichs.saturdayEconomy.SaturdayEconomy
 api-version: '1.21'
+commands:
+  buyfly:
+    description: "Buy the ability to fly"
+    usage: /<command> buy
+    aliases: [tempfly]
+    permission: saturdayEconomy.buyfly
+    permission-message: "You do not have permission to use this command."
+  sereload:
+    usage: /<command>
+    description: "Reload the plugin"
+    permission: saturdayEconomy.reload
+    permission-message: "You do not have permission to use this command."

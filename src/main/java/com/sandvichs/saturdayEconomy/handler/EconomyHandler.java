@@ -47,7 +47,7 @@ public class EconomyHandler {
             }
         } else {
             // send message to console
-            System.out.println("Player is not online or economy is not enabled.");
+            getLogger().info("Player is not online or economy is not enabled.");
         }
     }
 
@@ -65,7 +65,20 @@ public class EconomyHandler {
             }
         } else {
             // send message to console
-            System.out.println("Player is not online or economy is not enabled.");
+            getLogger().info("Player is not online or economy is not enabled.");
+        }
+    }
+
+    // get player's balance
+    public static double getBalance(Player player) {
+        // check if player is online
+        if (hasEconomy() && player.isOnline()) {
+            // get player's balance
+            return economy.getBalance(player);
+        } else {
+            // send message to console
+            getLogger().info("Player is not online or economy is not enabled.");
+            return 0;
         }
     }
 

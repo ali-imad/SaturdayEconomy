@@ -11,10 +11,13 @@ import org.bukkit.event.entity.EntityDeathEvent;
 // Professions are a feature of the game that allow players to earn money by performing certain tasks.
 public class ProfessionListener implements Listener {
 
-    private final FileConfiguration config;
+    private FileConfiguration config;
 
     // This class will listen for events related to professions.
-    public ProfessionListener(FileConfiguration config) {
+    public ProfessionListener() {
+    }
+
+    public void setConfig(FileConfiguration config) {
         this.config = config;
     }
 
