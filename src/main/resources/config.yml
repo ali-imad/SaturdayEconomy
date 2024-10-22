@@ -14,6 +14,45 @@ mob_chances:  # Chance of a mob giving money
   frequent: 0.75
   always: 1.0
 
+block_chances:  # Chance of a mob giving money
+  never: 0.0
+  occasional: 0.05
+  frequent: 0.1
+  often: 0.5
+  always: 1.0
+
+block_rewards:
+  diamond_ore:
+    rate: often
+    amount: 70.0
+  emerald_ore:
+    rate: often
+    amount: 50.0
+  gold_ore:
+    rate: frequent
+    amount: 40.0
+  iron_ore:
+    rate: frequent
+    amount: 35.0
+  coal_ore:
+    rate: frequent
+    amount: 20.0
+  redstone_ore:
+    rate: occasional
+    amount: 50.0
+  lapis_ore:
+    rate: often
+    amount: 20.0
+  nether_quartz_ore:
+    rate: occasional
+    amount: 50.0
+  ancient_debris:
+    rate: always
+    amount: 150.0
+  nether_gold_ore:
+    rate: occasional
+    amount: 50.0
+
 mob_rewards:
   zombie:
     rate: occasional

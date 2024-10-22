@@ -16,10 +16,6 @@ public final class SaturdayEconomy extends JavaPlugin {
     private ProfessionListener professionListener;
     public Permission perms;
 
-    public void setConfig(FileConfiguration config) {
-        this.config = config;
-    }
-
     @Override
     public void onEnable() {
         professionListener = new ProfessionListener();
