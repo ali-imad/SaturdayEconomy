@@ -81,25 +81,5 @@ public class EconomyHandler {
             return 0;
         }
     }
-
-    // give daily salary
-    public void giveDailySalary(Player player) {
-        // get player's balance
-        double balance = economy.getBalance(player);
-        // get player's salary
-        double salary = 350.0;
-
-        // get player's salary message
-        String salaryMessage = "You have received your daily salary of " + salary + "λ.";
-        // get player's balance message
-        String balanceMessage = "Your balance is now " + balance + "λ.";
-
-        // pay player
-        payPlayer(player, salary, false);
-        // send message to player
-        player.sendMessage(salaryMessage);
-        player.sendMessage(balanceMessage);
-
-    }
 }
 
