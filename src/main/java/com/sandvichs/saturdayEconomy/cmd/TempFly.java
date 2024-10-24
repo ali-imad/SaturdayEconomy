@@ -3,6 +3,7 @@ package com.sandvichs.saturdayEconomy.cmd;
 import com.sandvichs.saturdayEconomy.handler.EconomyHandler;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,9 +27,13 @@ public class TempFly implements CommandExecutor, TabExecutor {
         BukkitRunnable cleanUp = new BukkitRunnable() {
             @Override
             public void run() {
-                player.sendMessage("Your temporary fly has expired!");
-                player.setAllowFlight(false);
-                perms.playerRemove(player, "essentials.fly");
+                if (player.isOnline()) {
+                    player.sendMessage("Your temporary fly has expired!");
+                    player.setAllowFlight(false);
+                    perms.playerRemove(player, "essentials.fly");
+                } else {
+                    perms.playerRemove(String.valueOf(player.getWorld()), player, "essentials.fly");
+                }
             }
         };
         cleanUp.runTaskLater(plugin, config.getInt("player.tempfly_duration") * 20L);
