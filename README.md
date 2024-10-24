@@ -10,10 +10,8 @@ For use in a server, Vault, mcMMO, and Essentials
  - Player professions
    - Block breaking rewards
    - Mob slaying rewards
- - Salaries
+ - Salaries (mcMMO scaling)
     - Hourly
+    - Daily
  - Commands
    - /tempfly -> Temporarily fly for a certain amount of time
-
-## TODO:
- - [ ] Add a daily salary command
