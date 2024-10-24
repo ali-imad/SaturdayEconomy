@@ -15,3 +15,4 @@ For use in a server, Vault, mcMMO, and Essentials
     - Daily
  - Commands
    - /tempfly -> Temporarily fly for a certain amount of time
+   - /daily -> Give daily salary
