@@ -26,7 +26,7 @@ public class SalaryManager {
     }
 
     // Get hourly salary for a player
-    private double getSalary(Player key) {
+    private double getHourlySalary(Player key) {
         double hourly = rates.getDouble("hourly");
         ;
         McMMOPlayer player = getPlayer(key);
@@ -38,11 +38,29 @@ public class SalaryManager {
             return hourly;
         }
         // get mcmmo level and scale
-        double bonus_scale = rates.getDouble("mcmmo_scale");
+        double bonus_scale = rates.getDouble("hourly_bonus");
         // scale and round to two decimal places
         hourly += (double) Math.round((100 * level * bonus_scale)) / 100;
 
         return hourly;
+    }
+
+    private double getDailySalary(Player key) {
+        double daily = rates.getDouble("daily");
+        McMMOPlayer player = getPlayer(key);
+        if (player == null) {
+            return daily;
+        }
+        int level = player.getPowerLevel();
+        if (level == 0) {
+            return daily;
+        }
+        // get mcmmo level and scale
+        double bonus_scale = rates.getDouble("daily_bonus");
+        // scale and round to two decimal places
+        daily += (double) Math.round((100 * level * bonus_scale)) / 100;
+
+        return daily;
     }
 
     public BukkitRunnable createSalaryTask() {
@@ -50,7 +68,7 @@ public class SalaryManager {
             @Override
             public void run() {
                 for (Player key : playtime.keySet()) {
-                    paySalary(key);
+                    payHourly(key);
                 }
             }
         };
@@ -70,7 +88,7 @@ public class SalaryManager {
     }
 
     // Pay player salary
-    public void paySalary(Player player) {
+    public void payHourly(Player player) {
         long salaryFreq = rates.getLong("pay_freq");
         long timeToSalary = 3600000 / salaryFreq; // 1 hour in milliseconds div by salary frequency
         if (player == null || !player.isOnline()) {
@@ -79,13 +97,18 @@ public class SalaryManager {
 
         if (getPlayerSessionTime(player) >= timeToSalary) {
             // round to two decimal places
-            double salary = (double) Math.round(getSalary(player) / salaryFreq * 100) / 100;
+            double salary = (double) Math.round(getHourlySalary(player) / salaryFreq * 100) / 100;
             Bukkit.getLogger().info("Paying salary of " + salary + " to player " + player);
             payPlayer(player, salary, false);
             playtime.put(player, new Date()); // refresh playtime
         }
     }
 
+    public void payDaily(Player player) {
+        double salary = getDailySalary(player);
+        Bukkit.getLogger().info("Paying daily salary of " + salary + " to player " + player);
+        payPlayer(player, salary, true);
+    }
 
     public void deregisterPlayer(Player player) {
         Bukkit.getLogger().info("Player " + player + " has left. Deregistering from salary.");

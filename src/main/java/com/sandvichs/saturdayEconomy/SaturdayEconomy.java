@@ -1,13 +1,16 @@
 package com.sandvichs.saturdayEconomy;
 
+import com.sandvichs.saturdayEconomy.cmd.Daily;
 import com.sandvichs.saturdayEconomy.cmd.ReloadConfig;
 import com.sandvichs.saturdayEconomy.cmd.TempFly;
+import com.sandvichs.saturdayEconomy.handler.CooldownHandler;
 import com.sandvichs.saturdayEconomy.handler.EconomyHandler;
 import com.sandvichs.saturdayEconomy.listener.PlayerListener;
 import com.sandvichs.saturdayEconomy.listener.ProfessionListener;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class SaturdayEconomy extends JavaPlugin {
     private FileConfiguration config;
@@ -23,8 +26,12 @@ public final class SaturdayEconomy extends JavaPlugin {
         playerListener = new PlayerListener(salaryManager);
         perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
         reloadConfig();
+
         // check for paying salaries
         salaryManager.createSalaryTask().runTaskTimer(this, 0, 900); // 1200 ticks in a minute
+        CooldownHandler.createTickTask().runTaskTimer(this, 0, 20);
+
+        getCommand("daily").setExecutor(new Daily());
         getCommand("sereload").setExecutor(new ReloadConfig(this));
 
         // check for temp flight
@@ -32,7 +39,6 @@ public final class SaturdayEconomy extends JavaPlugin {
         TempFly.perms = perms;
 
         getCommand("tempfly").setExecutor(new TempFly());
-
 
         EconomyHandler.initEconomy();
 
@@ -50,9 +56,12 @@ public final class SaturdayEconomy extends JavaPlugin {
         config = getConfig();
         config.options().copyDefaults(true);
         saveConfig();
-        TempFly.setPluginConfig(this.config);
         salaryManager.setConfig(this.config);
         professionListener.setConfig(this.config);
+
+        // set command configs
+        TempFly.setPluginConfig(this.config);
+        Daily.setConfig(salaryManager);
     }
 
     @Override

@@ -14,3 +14,8 @@ commands:
     description: "Reload the plugin"
     permission: saturdayEconomy.reload
     permission-message: "You do not have permission to use this command."
+  daily:
+    usage: /<command>
+    description: "Get daily salary"
+    permission: saturdayEconomy.daily
+    permission-message: "You do not have permission to use this command."
