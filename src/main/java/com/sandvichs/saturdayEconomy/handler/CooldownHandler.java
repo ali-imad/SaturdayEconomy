@@ -14,23 +14,23 @@ import static org.bukkit.Bukkit.getLogger;
 // Persistent cooldowns are cooldowns that are tracked for a specific player and will persist even when the player logs out
 public class CooldownHandler {
     public static final Integer SECONDS_IN_DAY = 86400;
-    private static final HashMap<Player, HashMap<String, Date>> persistent = new HashMap<>();
-    private static final HashMap<Player, HashMap<String, Integer>> tracked = new HashMap<>();
+    private static final HashMap<String, HashMap<String, Date>> persistent = new HashMap<>();
+    private static final HashMap<String, HashMap<String, Integer>> tracked = new HashMap<>();
 
     // Checks if a player has a cooldown for a specific command, and if so, returns the seconds left on the cooldown
     // Otherwise returns 0
     // PARAMS: player - the player to check the cooldown for
     //         cmd - the command to check the cooldown for
-    public static int check(Player player, String cmd) {
+    public static int check(String player, String cmd) {
         if (persistent.containsKey(player) && persistent.get(player).containsKey(cmd)) {
             int timeLeft = (int) ((persistent.get(player).get(cmd).getTime() - new Date().getTime()) / 1000);
-            getLogger().info("Cooldown found for player " + player.getName() + " and command " + cmd + " with " + timeLeft + " seconds left");
+            getLogger().info("Cooldown found for player " + player + " and command " + cmd + " with " + timeLeft + " seconds left");
             return Math.max(0, timeLeft);
         } else if (tracked.containsKey(player) && tracked.get(player).containsKey(cmd)) {
-            getLogger().info("Cooldown found for player " + player.getName() + " and command " + cmd + " with " + tracked.get(player).get(cmd) + " seconds left");
+            getLogger().info("Cooldown found for player " + player + " and command " + cmd + " with " + tracked.get(player).get(cmd) + " seconds left");
             return Math.max(0, tracked.get(player).get(cmd));
         }
-        getLogger().info("No cooldown found for player " + player.getName() + " and command " + cmd);
+        getLogger().info("No cooldown found for player " + player + " and command " + cmd);
         return 0;
     }
 
@@ -45,7 +45,7 @@ public class CooldownHandler {
 
     // Ticks down all tracked cooldowns by some value of seconds
     private static void tick() {
-        for (Player player : tracked.keySet()) {
+        for (String player : tracked.keySet()) {
             for (String cmd : tracked.get(player).keySet()) {
                 int time = tracked.get(player).get(cmd);
                 if (time - 1 <= 0) {
@@ -58,12 +58,12 @@ public class CooldownHandler {
     }
 
     // Inserts a cooldown for a player
-    // PARAMS: player - the player to insert the cooldown for
+    // PARAMS: player - the name of the player to insert the cooldown for
     //         cmd - the command to insert the cooldown for
     //         seconds - the number of seconds the cooldown will last
     //         isPersistent - whether the cooldown is persistent (true) or tracked (false)
     // RETURNS: void
-    public static void insert(Player player, String cmd, Integer seconds, boolean isPersistent) {
+    public static void insert(String player, String cmd, Integer seconds, boolean isPersistent) {
         if (isPersistent) {
             if (!persistent.containsKey(player)) {
                 persistent.put(player, new HashMap<>());
@@ -77,7 +77,7 @@ public class CooldownHandler {
         }
     }
 
-    public static void remove(Player player, String cmd) {
+    public static void remove(String player, String cmd) {
         if (persistent.containsKey(player)) {
             persistent.get(player).remove(cmd);
         }

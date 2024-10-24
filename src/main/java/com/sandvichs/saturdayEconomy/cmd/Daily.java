@@ -22,9 +22,10 @@ public class Daily implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        int timeLeft = CooldownHandler.check(player, "daily");
+        int timeLeft = CooldownHandler.check(player.getName(), "daily");
         if (timeLeft == 0) {
-            CooldownHandler.insert(player, "daily", CooldownHandler.SECONDS_IN_DAY,true);
+            CooldownHandler.insert(player.getName(), "daily", CooldownHandler.SECONDS_IN_DAY,true);
+            sm.payDaily(player);
         } else {
             sender.sendMessage("You can only claim your daily reward once a day.");
         }
